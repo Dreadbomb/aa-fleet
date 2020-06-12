@@ -1,0 +1,6 @@
+include LICENSE
+include README.md
+recursive-include fleet *.py
+recursive-include fleet/static *
+recursive-include fleet/templates *
+
