@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required, permission_required
 from .tasks import open_fleet, send_fleet_invitation
 from .models import Fleet
@@ -13,7 +14,7 @@ from allianceauth.groupmanagement.models import AuthGroup
 def dashboard(request):
     groups = request.user.groups.all()
     fleets = Fleet.objects\
-        .filter(groups__group__in=groups)\
+        .filter(Q(groups__group__in=groups) | Q(groups=None))\
         .all()
     context = {
         'fleets': fleets
