@@ -14,8 +14,8 @@ class FleetMenuItem(MenuItemHook):
             self,
             _('fleet'),
             'fa fa-cube fa-fw',
-            'fleet:index',
-            navactive=['fleet:index']
+            'fleet:dashboard',
+            navactive=['fleet:']
         )
 
     def render(self, request):
@@ -31,4 +31,4 @@ def register_menu():
 
 @hooks.register('url_hook')
 def register_urls():
-    return UrlHook(urls, 'fleet', r'^fleet/')
+    return UrlHook(urls, 'fleet', '^fleet/')

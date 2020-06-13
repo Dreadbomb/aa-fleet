@@ -1,0 +1,54 @@
+{% extends 'fleet/base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+{% block fleet_block %}
+    <div class="container col-sm-12">
+        <h2>
+            Fleet List
+        </h2>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-hover dataTable" id="docTable">
+                    <thead>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Join</th>
+                    </thead>
+                    <tbody>                       
+                        {% for fleet in fleets %}
+                        <tr>
+                            <td>
+                                <img class="img-circle" style="display: block; margin: auto;" src="https://images.evetech.net/characters/{{fleet.fleet_commander_id}}/portrait?size=64"/>
+                            </td>
+                            <td>
+                                {{fleet.name}}
+                            </td>
+                            <td>
+                                {{fleet.created_at}}
+                            </td>
+                            <td>
+                                <form>
+                                    <a href="{% url 'fleet:join_fleet' fleet.fleet_id %}" class="btn btn-xs btn-success" style="margin-top: -2px;">Join Fleet</a>
+                                <form>
+                            </td>
+                        </tr>
+                        {% endfor %}                     
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_javascript %}
+    {% include 'bundles/datatables-js.html' %}
+{% endblock %}
+
+{% block extra_script %}
+    $(document).ready(function(){
+        $('#docTable').DataTable();
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+{% endblock %}

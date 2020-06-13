@@ -1,0 +1,57 @@
+{% extends 'fleet/base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load filters %}
+
+{% block page_title %}{% trans "Create fleet" %}{% endblock %}
+
+{% block fleet_block %}
+    {% if msg %}
+            <div class="alert alert-{{ msg.0 }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">&times</span>
+                    </button>
+                    {% if msg.0 != 'warning' %}<h4>{% if msg.0 == 'danger' %}Oh No!{% elif msg.0 == 'success' %}Success!{% endif %}</h4>{% endif %}
+                    <p>{{ msg.1 }}</p>
+                </div>
+    {% endif %}
+    <div class="container col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Create Fleet
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <form class="form-signin" role="form" action="{% url 'fleet:save_fleet' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="character_id" id="character_id" value="{{character_id}}"/>
+                            <div class="form-group">
+                                <label for="iconSelect" class="col-sm-2 control-label">Fleet Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="name" id="name" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label for="iconSelect" class="col-sm-2 control-label">Enable Free Move</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" class="form-control" name="free_move" id="free_move" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group" >
+                                <label for="iconSelect" class="col-sm-2 control-label">Fleet MOTD</label>
+                                <div class="col-sm-10" style="margin-top: 5px; margin-bottom: 5px;">
+                                    <textarea class="form-control" name="motd" id="motd" rows="10"></textarea>
+                                </div>
+                            </div>
+                            <br />
+                            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

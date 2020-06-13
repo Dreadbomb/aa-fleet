@@ -1,0 +1,57 @@
+{% extends 'fleet/base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load filters %}
+
+{% block page_title %}{% trans "Create fleet" %}{% endblock %}
+
+{% block fleet_block %}
+    {% if msg %}
+            <div class="alert alert-{{ msg.0 }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">&times</span>
+                    </button>
+                    {% if msg.0 != 'warning' %}<h4>{% if msg.0 == 'danger' %}Oh No!{% elif msg.0 == 'success' %}Success!{% endif %}</h4>{% endif %}
+                    <p>{{ msg.1 }}</p>
+                </div>
+    {% endif %}
+    <div class="container col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Fleet invitation
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <form class="form-signin" role="form" action="" method="POST">
+                            {% csrf_token %}
+                            </br>
+                            <label>Select the characters to invite: </label>
+                            <select class="multiselect-ui" multiple="multiple" name="character_ids" id="character_ids">
+                             {% for character in characters %}
+                                <option value="{{character.character_id}}" >{{character.character_name}}</option>
+                             {% endfor %}
+                            </select>
+                            </br>
+                            <button class="btn btn-primary btn-block" style="margin-top: 10px;"type="submit">Send fleet invites</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css">
+{% endblock %}
+{% block extra_javascript %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.multiselect-ui').multiselect({
+            includeSelectAllOption: true
+            });
+        })
+    </script>
+{% endblock %}
