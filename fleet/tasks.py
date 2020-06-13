@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 @shared_task
-def open_fleet(character_id, motd, free_move, name):
+def open_fleet(character_id, motd, free_move, name, groups):
     required_scopes = ['esi-fleets.read_fleet.v1','esi-fleets.write_fleet.v1']
     c = esi.client
     token = Token.get_token(character_id,required_scopes)
@@ -23,6 +23,7 @@ def open_fleet(character_id, motd, free_move, name):
 
     fleet = Fleet(fleet_id=fleet_id, created_at=timezone.now(), motd=motd, is_free_move=free_move, fleet_commander_id = token.character_id, name=name)
     fleet.save()
+    fleet.groups.set(groups)
 
     esiFleet = {
         'is_free_move': free_move,

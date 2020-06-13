@@ -26,27 +26,30 @@
                         <form class="form-signin" role="form" action="{% url 'fleet:save_fleet' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="character_id" id="character_id" value="{{character_id}}"/>
-                            <div class="form-group">
+                            <div class="form-group row">
                                 <label for="iconSelect" class="col-sm-2 control-label">Fleet Name</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="name" id="name" />
                                 </div>
                             </div>
-                            <br />
-                            <div class="form-group">
+                            <div class="form-group row">
                                 <label for="iconSelect" class="col-sm-2 control-label">Enable Free Move</label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-2">
                                     <input type="checkbox" class="form-control" name="free_move" id="free_move" />
                                 </div>
+                                <label for="iconSelect" class="col-sm-2 control-label" style="display: block; text-align: center;">Group restriction</label>
+                                <select class="multiselect-ui" multiple="multiple" name="groups" id="groups">
+                                {% for group in auth_groups %}
+                                    <option value="{{group.group_id}}">{{group}}</option>
+                                {% endfor %}
+                                </select>
                             </div>
-                            <br />
-                            <div class="form-group" >
+                            <div class="form-group row" >
                                 <label for="iconSelect" class="col-sm-2 control-label">Fleet MOTD</label>
                                 <div class="col-sm-10" style="margin-top: 5px; margin-bottom: 5px;">
                                     <textarea class="form-control" name="motd" id="motd" rows="10"></textarea>
                                 </div>
                             </div>
-                            <br />
                             <button class="btn btn-primary btn-block" type="submit">Submit</button>
                         </form>
                     </div>
@@ -54,4 +57,18 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css">
+{% endblock %}
+{% block extra_javascript %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.multiselect-ui').multiselect({
+            includeSelectAllOption: true
+            });
+        })
+    </script>
 {% endblock %}
