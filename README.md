@@ -1,15 +1,91 @@
 # Fleet plugin app for Alliance Auth
 
-This is an fleet plugin app for [Alliance Auth](https://gitlab.com/allianceauth/allianceauth) (AA) that can be used as starting point to develop custom plugins.
+This is an fleet plugin app for [Alliance Auth](https://gitlab.com/allianceauth/allianceauth) (AA).
 
 ![License](https://img.shields.io/badge/license-MIT-green) ![python](https://img.shields.io/badge/python-3.6-informational) ![django](https://img.shields.io/badge/django-2.2-informational)
 
 ## Features
 
-## How to use it
+Alliance Fleet offers the following main features:
 
-## Installing into production AA
+- Create a fleet advert on auth
+- Restrict fleet advert to some AuthGroups
+- Set MOTD and Free Move from auth
+- Automaticly kill the fleet advert if the creator is out of fleet or changed fleet
+- Invite any character related to the user on auth
 
-## Contribute
+## Installation
 
-If you made a new app for AA please consider sharing it with the rest of the community. For any questions on how to share your app please contact the AA devs on their Discord. You find the current community creations [here](https://gitlab.com/allianceauth/community-creations).
+### 1. Install app
+
+Install into your Alliance Auth virtual envrionment from github
+```bash
+pip install git+https://github.com/Dreadbomb/aa-fleet
+```
+
+### 2. Update Eve Online app
+
+update the Eve Online app used for authentication in your AA installation to include the following scopes:
+
+```plain
+esi-fleets.read_fleet.v1
+esi-fleets.write_fleet.v1
+```
+
+### 3. Configure AA settings
+Configure your AA settings ('local.py') as follows:
+
+- Add `'fleet'` to `INSTALLED_APP`
+- Add these lines to the bottom of your settings file:
+
+```python
+#settings for fleet
+CELERYBEAT_SCHEDULE['fleet_check_fleet_adverts'] = {
+    'task': 'fleet.tasks.check_fleet_adverts',
+    'schedule': crontab(minute='*/1'),
+}
+```
+
+### 4. Finalize installation into AA
+
+Run migrations & copy static files
+
+```bash
+python manage.py migrate
+python manage.py collectstatic
+```
+
+Restart your supervisor services for AA
+
+### 5. Setup permissions
+
+Now you can access Alliance Auth and setup permissions for your users. See section **Permissions** below for details.
+
+## Updating
+
+To update your existing installation of Alliance Fleet first enable your virtual environment.
+
+Then run the following commands from your AA project directory (the one that contains `manage.py`).
+
+```bash
+pip install -U git+https://github.com/Dreadbomb/aa-fleet
+```
+
+```bash
+python manage.py migrate
+```
+
+```bash
+python manage.py collectstatic
+```
+
+Finally restart your AA supervisor services.
+
+## Permissions
+
+This is an overview of all permissions used by this app:
+
+Name | Purpose | Code
+-- | -- | --
+Can add / manage fleets | Let a user create and update fleet information |  `manage`
+Can access this app |Enabling the app for a user. This permission should be enabled for everyone who is allowed to use the app (e.g. Member state) |  `fleet_access`

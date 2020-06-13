@@ -54,6 +54,22 @@ def send_invitation(character_id, fleet_commander_token, fleet_id):
     }
     c.Fleets.post_fleets_fleet_id_members(fleet_id=fleet_id, token=fleet_commander_token.valid_access_token(), invitation=invitation).result()
 
+@shared_task
+def check_fleet_adverts():
+    required_scopes = ['esi-fleets.read_fleet.v1','esi-fleets.write_fleet.v1']
+    c = esi.client
+    fleets = Fleet.objects.all()
+    for fleet in fleets:
+        token = Token.get_token(fleet.fleet_commander_id,required_scopes)
+        try:
+            fleet_result = c.Fleets.get_characters_character_id_fleet(character_id=token.character_id,token=token.valid_access_token()).result()
+            fleet_id = fleet_result['fleet_id']
+            if(fleet_id != fleet.fleet_id):
+                fleet.delete()
+        except Exception as e:
+            if(e.status_code == 404): # 404 means the character is not in a fleet
+                fleet.delete()
+                logger.info("Character is not in a fleet - fleet advert removed")
 
 
 

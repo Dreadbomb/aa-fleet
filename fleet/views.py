@@ -40,7 +40,7 @@ def join_fleet(request, fleet_id):
     ctx = {}
     groups = request.user.groups.all()
     fleet = Fleet.objects\
-        .filter(groups__group__in=groups, fleet_id=fleet_id)\
+        .filter(Q(groups__group__in=groups) | Q(groups=None), fleet_id=fleet_id)\
         .count()
 
     if fleet == 0:
