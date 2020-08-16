@@ -5,16 +5,12 @@
 
 {% block page_title %}{% trans "Create fleet" %}{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/css/multi-select.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css">
+{% endblock %}
+
 {% block fleet_block %}
-    {% if msg %}
-            <div class="alert alert-{{ msg.0 }} alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                        <span aria-hidden="true">&times</span>
-                    </button>
-                    {% if msg.0 != 'warning' %}<h4>{% if msg.0 == 'danger' %}Oh No!{% elif msg.0 == 'success' %}Success!{% endif %}</h4>{% endif %}
-                    <p>{{ msg.1 }}</p>
-                </div>
-    {% endif %}
     <div class="container col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -26,7 +22,7 @@
                         <form class="form-signin" role="form" action="" method="POST">
                             {% csrf_token %}
                             </br>
-                            <label>Select the characters to invite: </label>
+                            <label for="character_ids">Select the characters to invite</label>
                             <select class="multiselect-ui" multiple="multiple" name="character_ids" id="character_ids">
                              {% for character in characters %}
                                 <option value="{{character.character_id}}" >{{character.character_name}}</option>
@@ -42,16 +38,16 @@
     </div>
 {% endblock %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css">
-{% endblock %}
 {% block extra_javascript %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.multiselect-ui').multiselect({
-            includeSelectAllOption: true
-            });
-        })
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
+{% endblock %}
+
+
+{% block extra_script %}
+
+new SlimSelect({
+    select: "#character_ids",
+    hideSelectedOption: true
+});
+
 {% endblock %}

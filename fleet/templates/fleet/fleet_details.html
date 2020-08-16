@@ -1,0 +1,96 @@
+{% extends 'fleet/base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load filters %}
+
+{% block page_title %}{% trans "Create fleet" %}{% endblock %}
+
+{% block fleet_block %}
+    <div class="container col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Fleet View
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-hover">
+                            <thead>
+                                <th>Ship Name</th>
+                                <th>Quantity</th>
+                                <th>Since Last Update</th>
+                            </thead>
+                            <tbody>                       
+                                
+                                {% for key, value in fleet.aggregate.items %}
+                                <tr>
+                                    <td>
+                                       {{ key }}
+                                    </td>
+                                    <td>
+                                        {{ value }}
+                                    </td>
+                                    <td>
+                                        {{ fleet.differential|get_item:key }}
+                                    </td>
+                                </tr> 
+                                {% endfor %}   
+                                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Fleet Members
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-hover dataTable" id="docTable">
+                            <thead>
+                                <th>Name</th>
+                                <th>Ship type</th>
+                                <th>System</th>
+                            </thead>
+                            <tbody>                       
+                                <tr>
+                                {% for member in fleet.fleet %}
+                                    <td>
+                                        {{member.character_name}}
+                                    </td>
+                                    <td>
+                                        {{member.ship_type_name}}
+                                    </td>
+                                    <td>
+                                        {{member.solar_system_name}}
+                                    </td>
+                                </tr>
+                                {% endfor %}                     
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_javascript %}
+    {% include 'bundles/datatables-js.html' %}
+{% endblock %}
+
+{% block extra_script %}
+    $(document).ready(function(){
+        $('#docTable').DataTable();
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+
+    setTimeout(function() {
+        location.reload();
+    }, 60000);
+{% endblock %}

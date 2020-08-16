@@ -1,11 +1,10 @@
 from .providers import esi
-from .models import Fleet
+from .models import Fleet, FleetInformation
 from esi.models import Token
 from celery import shared_task
 from django.utils import timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
-
 
 logger = logging.getLogger(__name__)
 
@@ -72,5 +71,67 @@ def check_fleet_adverts():
                 logger.info("Character is not in a fleet - fleet advert removed")
 
 
+@shared_task
+def get_fleet_composition(fleet_id):
+    required_scopes = ['esi-fleets.read_fleet.v1','esi-fleets.write_fleet.v1']
+    c = esi.client
+    fleet = Fleet.objects.get(fleet_id=fleet_id)
+    token = Token.get_token(fleet.fleet_commander_id, required_scopes)
+    fleet_infos = c.Fleets.get_fleets_fleet_id_members(fleet_id=fleet_id, token=token.valid_access_token()).result()
 
-   
+    characters = {}
+    systems = {}
+    ship_type = {}
+
+    for member in fleet_infos:
+        characters[member['character_id']] = ""
+        systems[member['solar_system_id']] = ""
+        ship_type[member['ship_type_id']] = ""
+    ids = []
+    ids.extend(list(characters.keys()))
+    ids.extend(list(systems.keys()))
+    ids.extend(list(ship_type.keys()))
+    
+    ids_to_name = c.Universe.post_universe_names(ids=ids).result()
+    for member in fleet_infos:
+        index = [x['id'] for x in ids_to_name].index(member['character_id'])
+        member['character_name'] = ids_to_name[index]['name']
+    for member in fleet_infos:
+        index = [x['id'] for x in ids_to_name].index(member['solar_system_id'])
+        member['solar_system_name'] = ids_to_name[index]['name']
+    for member in fleet_infos:
+        index = [x['id'] for x in ids_to_name].index(member['ship_type_id'])
+        member['ship_type_name'] = ids_to_name[index]['name']
+
+    aggregate = get_fleet_aggregate(fleet_infos)
+
+    differential = dict()
+
+    for key, value in aggregate.items():
+        fleet_info_agg = FleetInformation.objects.filter(fleet__fleet_id=fleet_id, ship_type_name=key)
+        if fleet_info_agg.count() > 0:
+            differential[key] = value - fleet_info_agg.latest('date').count
+        else:
+            differential[key] = value          
+        FleetInformation.objects.create(fleet=fleet, ship_type_name=key, count=value)
+        
+    return FleetViewAggregate(fleet_infos, aggregate, differential)
+
+@shared_task
+def get_fleet_aggregate(fleet_infos):
+    counts = dict()
+
+    for member in fleet_infos:
+        type_ = member.get('ship_type_name')
+        if type_ in counts:
+            counts[type_] += 1
+        else:
+            counts[type_] = 1
+    return counts
+
+
+class FleetViewAggregate(object):
+  def __init__(self, fleet, aggregate, differential):
+    self.fleet = fleet
+    self.aggregate = aggregate
+    self.differential = differential

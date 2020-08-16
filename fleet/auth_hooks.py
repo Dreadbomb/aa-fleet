@@ -12,8 +12,8 @@ class FleetMenuItem(MenuItemHook):
         # setup menu entry for sidebar
         MenuItemHook.__init__(
             self,
-            _('fleet'),
-            'fa fa-cube fa-fw',
+            _('Fleet'),
+            'fa fa-users fa-fw',
             'fleet:dashboard',
             navactive=['fleet:']
         )

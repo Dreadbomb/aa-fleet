@@ -1,8 +1,6 @@
 from django.db import models
 from allianceauth.groupmanagement.models import AuthGroup
-
-
-# Create your models here.
+from datetime import datetime
 
 class Fleet(models.Model):
     fleet_id = models.BigIntegerField(primary_key=True)
@@ -20,3 +18,14 @@ class Fleet(models.Model):
             ('fleet_access', 'Can access this app'),
             ('manage', 'Can Manage Fleets')
         )
+
+class FleetInformation(models.Model):
+    fleet = models.ForeignKey(Fleet, on_delete=models.CASCADE)
+    ship_type_name = models.CharField(max_length=100)
+    count = models.IntegerField()
+    date = models.DateTimeField(default=datetime.now)
+
+    class Meta:                     
+        default_permissions = ()
+
+    
