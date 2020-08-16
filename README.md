@@ -13,6 +13,15 @@ Alliance Fleet offers the following main features:
 - Set MOTD and Free Move from auth
 - Automaticly kill the fleet advert if the creator is out of fleet or changed fleet
 - Invite any character related to the user on auth
+- FC View with an aggregation of ships in fleet with variation each 60 seconds
+
+![fleets](img/fleets.png)
+
+![fleet_advert](img/fleet_advert.png)
+
+![fleet_invite](img/fleet_invite.png)
+
+![fleet_view](img/fleet_view.png)
 
 ## Installation
 
