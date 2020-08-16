@@ -17,7 +17,7 @@ Alliance Fleet offers the following main features:
 
 ![fleets](img/fleets.png)
 
-
+![fleet_advert_create](img/fleet_advert_create.png)
 
 ![fleet_invite](img/fleet_invite.png)
 
