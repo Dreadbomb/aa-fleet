@@ -29,7 +29,7 @@ Alliance Fleet offers the following main features:
 
 Install into your Alliance Auth virtual envrionment from github
 ```bash
-pip install git+https://github.com/Dreadbomb/aa-fleet
+pip install aa-fleet
 ```
 
 ### 2. Update Eve Online app
@@ -77,7 +77,7 @@ To update your existing installation of Alliance Fleet first enable your virtual
 Then run the following commands from your AA project directory (the one that contains `manage.py`).
 
 ```bash
-pip install -U git+https://github.com/Dreadbomb/aa-fleet
+pip install -U aa-fleet
 ```
 
 ```bash
