@@ -19,7 +19,7 @@ class FleetMenuItem(MenuItemHook):
         )
 
     def render(self, request):
-        if request.user.has_perm('fleet.basic_access'):
+        if request.user.has_perm('fleet.fleet_access'):
             return MenuItemHook.render(self, request)
         return ''
 
