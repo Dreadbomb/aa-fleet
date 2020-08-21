@@ -7,13 +7,13 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css">
 {% endblock %}
 
-{% block page_title %}{% trans "Create fleet" %}{% endblock %}
+{% block page_title %}{% trans "Edit Fleet" %}{% endblock %}
 
 {% block fleet_block %}
     <div class="container col-sm-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                Create Fleet
+                Edit Fleet
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -21,6 +21,7 @@
                         <form class="form-signin" role="form" action="{% url 'fleet:save_fleet' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="character_id" id="character_id" value="{{character_id}}"/>
+                            <input type="hidden" name="origin" id="origin" value="edit"/>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -57,9 +58,9 @@
                                 </div>
                             </div>
                             {% if fleet.is_free_move %}
-                                <input type="checkbox" style="margin-right: 5px;" class="form-check-input" name="free_move" id="is_free_move" checked/><label for="free_move" class="form-check-label">Enable Free Move</label>
+                                <input type="checkbox" style="margin-right: 5px;" class="form-check-input" name="free_move" id="free_move" checked/><label for="free_move" class="form-check-label">Enable Free Move</label>
                             {% else %}
-                                <input type="checkbox" style="margin-right: 5px;" class="form-check-input" name="free_move" id="is_free_move" /><label for="free_move" class="form-check-label">Enable Free Move</label> 
+                                <input type="checkbox" style="margin-right: 5px;" class="form-check-input" name="free_move" id="free_move" /><label for="free_move" class="form-check-label">Enable Free Move</label> 
                             {% endif %}
                             <button class="btn btn-primary btn-block" type="submit">Submit</button>
                         </form>

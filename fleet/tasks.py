@@ -29,7 +29,7 @@ def open_fleet(character_id, motd, free_move, name, groups):
         'motd': motd
     }
     c.Fleets.put_fleets_fleet_id(fleet_id=fleet_id, token=token.valid_access_token(), new_settings=esiFleet).result()
-
+        
 @shared_task
 def send_fleet_invitation(character_ids, fleet_id):
     required_scopes = ['esi-fleets.write_fleet.v1']

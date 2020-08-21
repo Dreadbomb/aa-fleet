@@ -11,6 +11,9 @@
 
 {% block fleet_block %}
     <div class="container col-sm-12">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">{{error}}</div>
+        {%endif%}
         <div class="panel panel-primary">
             <div class="panel-heading">
                 Create Fleet
@@ -21,11 +24,12 @@
                         <form class="form-signin" role="form" action="{% url 'fleet:save_fleet' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="character_id" id="character_id" value="{{character_id}}"/>
+                            <input type="hidden" name="origin" id="origin" value="create"/>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label for="name" class="control-label">Fleet Name</label>
-                                        <input type="text" class="form-control" name="name" id="name" />
+                                        <input type="text" class="form-control" name="name" id="name" {% if name %}value={{name}}{%endif%} />
                                     </div>
                                 </div>
                             </div>
@@ -36,7 +40,15 @@
                                         <span class="help-block" style="margin-top: 0; margin-bottom: 0; font-size: 10pt; font-style: italic;">Only selected groups will have access to the fleet. If no groups are selected the fleet will be available to all of the authed groups.</span>
                                         <select name="groups" id="groups" multiple>
                                             {% for group in auth_groups %}
-                                                <option value="{{group.group_id}}">{{group}}</option>
+                                                {% if groups %}
+                                                    {% if group in groups %}
+                                                        <option value="{{group.group_id}}" selected>{{group}}</option>
+                                                    {%else%}
+                                                        <option value="{{group.group_id}}" selected>{{group}}</option>
+                                                    {%endif%}
+                                                {%else%}
+                                                    <option value="{{group.group_id}}">{{group}}</option>
+                                                {%endif%}
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -47,12 +59,12 @@
                                     <div class="form-group" >
                                         <label for="motd" class="control-label">Fleet MOTD</label>
                                         <div>
-                                            <textarea class="form-control" name="motd" id="motd" rows="10"></textarea>
+                                            <textarea class="form-control" name="motd" id="motd" rows="10">{% if motd %}{{motd}}{%endif%}</textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <input type="checkbox" style="margin-right: 5px;" class="form-check-input" name="free_move" id="free_move" /><label for="free_move" class="form-check-label">Enable Free Move</label>
+                            <input type="checkbox" style="margin-right: 5px;" class="form-check-input" name="free_move" id="free_move" {% if is_free_move %}checked{%endif%} /><label for="free_move" class="form-check-label">Enable Free Move</label>
                             <button class="btn btn-primary btn-block" type="submit">Submit</button>
                         </form>
                     </div>

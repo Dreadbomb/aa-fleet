@@ -4,6 +4,9 @@
 
 {% block fleet_block %}
     <div class="container col-sm-12">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">{{error}}</div>
+        {% endif %}
         <h2>
             Available Fleets
         </h2>
