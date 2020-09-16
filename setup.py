@@ -12,6 +12,11 @@ with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+# dependencies
+install_requires = [
+    "allianceauth>=2.7.3",
+]
+
 setup(
     name="aa-fleet",
     version=__version__,
@@ -39,5 +44,5 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     python_requires="~=3.6",
-    install_requires=["django>=2.2,<3.0", "django-esi>=1.5,<3"],
+    install_requires=install_requires,
 )
