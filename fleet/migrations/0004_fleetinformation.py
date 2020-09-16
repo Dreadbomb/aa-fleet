@@ -8,21 +8,34 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fleet', '0003_fleet_groups'),
+        ("fleet", "0003_fleet_groups"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FleetInformation',
+            name="FleetInformation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ship_type_name', models.CharField(max_length=100)),
-                ('count', models.IntegerField()),
-                ('date', models.DateTimeField(default=datetime.datetime.now)),
-                ('fleet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fleet.Fleet')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("ship_type_name", models.CharField(max_length=100)),
+                ("count", models.IntegerField()),
+                ("date", models.DateTimeField(default=datetime.datetime.now)),
+                (
+                    "fleet",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="fleet.Fleet"
+                    ),
+                ),
             ],
             options={
-                'default_permissions': (),
+                "default_permissions": (),
             },
         ),
     ]

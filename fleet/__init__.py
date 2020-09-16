@@ -1,3 +1,3 @@
-default_app_config = 'fleet.apps.FleetConfig'
+default_app_config = "fleet.apps.FleetConfig"
 
-__version__ = '1.1.0'
+__version__ = "1.1.0"
