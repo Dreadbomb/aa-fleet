@@ -1,6 +1,7 @@
 {% extends 'fleet/base.html' %}
 {% load i18n %}
 {% load humanize %}
+{% load evelinks %}
 
 {% block page_title %}{% trans "Create fleet" %}{% endblock %}
 
@@ -10,6 +11,7 @@
             <div class="panel-heading">
                 Fleet View
             </div>
+
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
@@ -19,8 +21,8 @@
                                 <th>Quantity</th>
                                 <th>Since Last Update</th>
                             </thead>
-                            <tbody>
 
+                            <tbody>
                                 {% for key, value in fleet.aggregate.items %}
                                 <tr>
                                     <td>
@@ -32,19 +34,20 @@
                                     <td>
                                         {{ fleet.differential|get_item:key }}
                                     </td>
-                                </tr> 
+                                </tr>
                                 {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="panel panel-primary">
             <div class="panel-heading">
                 Fleet Members
             </div>
+
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
@@ -54,14 +57,15 @@
                                 <th>Ship type</th>
                                 <th>System</th>
                             </thead>
+
                             <tbody>
                                 <tr>
                                 {% for member in fleet.fleet %}
                                     <td>
-                                        {{member.character_name}}
+                                        <img class="img-circle eve-character-portrait" src="{{ member.character_id|character_portrait_url:32 }}" style="margin-right: 1rem;"> {{member.character_name}}
                                     </td>
                                     <td>
-                                        {{member.ship_type_name}}
+                                        <img class="img-circle eve-type-icon" src="{{ member.ship_type_id|type_icon_url:32 }}" style="margin-right: 1rem;"> {{member.ship_type_name}}
                                     </td>
                                     <td>
                                         {{member.solar_system_name}}

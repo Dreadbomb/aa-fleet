@@ -1,6 +1,7 @@
 {% extends 'fleet/base.html' %}
 {% load i18n %}
 {% load humanize %}
+{% load evelinks %}
 
 {% block fleet_block %}
     <div class="container col-sm-12">
@@ -29,7 +30,7 @@
                         {% for fleet in fleets %}
                         <tr>
                             <td>
-                                <img class="img-circle" style="display: block; margin: auto;" src="https://images.evetech.net/characters/{{fleet.fleet_commander_id}}/portrait?size=64"/>
+                                <img class="img-circle eve-character-portrait" style="display: block; margin: auto;" src="{{ fleet.fleet_commander_id|character_portrait_url:64 }}">
                             </td>
                             <td>
                                 {{fleet.name}}
