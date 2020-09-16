@@ -1,10 +1,11 @@
 {% extends 'fleet/base.html' %}
 {% load i18n %}
 {% load humanize %}
+{% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/css/multi-select.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css">
+    <link rel="stylesheet" href="{% static 'fleet/libs/multi-select/0.9.12/css/multi-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'fleet/libs/slim-select/1.26.0/css/slimselect.min.css' %}" />
 {% endblock %}
 
 {% block page_title %}{% trans "Create fleet" %}{% endblock %}
@@ -35,7 +36,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="form-group"> 
+                                    <div class="form-group">
                                         <label for="groups" style="margin-bottom: 0;">Select Groups</label>
                                         <span class="help-block" style="margin-top: 0; margin-bottom: 0; font-size: 10pt; font-style: italic;">Only selected groups will have access to the fleet. If no groups are selected the fleet will be available to all of the authed groups.</span>
                                         <select name="groups" id="groups" multiple>
@@ -75,7 +76,7 @@
 {% endblock %}
 
 {% block extra_javascript %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
+    <script src="{% static 'fleet/libs/slim-select/1.26.0/js/slimselect.min.js' %}"></script>
 {% endblock %}
 
 

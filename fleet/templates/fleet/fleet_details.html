@@ -19,8 +19,8 @@
                                 <th>Quantity</th>
                                 <th>Since Last Update</th>
                             </thead>
-                            <tbody>                       
-                                
+                            <tbody>
+
                                 {% for key, value in fleet.aggregate.items %}
                                 <tr>
                                     <td>
@@ -33,14 +33,14 @@
                                         {{ fleet.differential|get_item:key }}
                                     </td>
                                 </tr> 
-                                {% endfor %}   
-                                               
+                                {% endfor %}
+
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 Fleet Members
@@ -54,7 +54,7 @@
                                 <th>Ship type</th>
                                 <th>System</th>
                             </thead>
-                            <tbody>                       
+                            <tbody>
                                 <tr>
                                 {% for member in fleet.fleet %}
                                     <td>
@@ -67,7 +67,7 @@
                                         {{member.solar_system_name}}
                                     </td>
                                 </tr>
-                                {% endfor %}                     
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

@@ -25,7 +25,7 @@
                             <th>Edit</th>
                         {% endif %}
                     </thead>
-                    <tbody>                       
+                    <tbody>
                         {% for fleet in fleets %}
                         <tr>
                             <td>
@@ -42,16 +42,16 @@
                             </td>
                             {% if perms.fleet.manage %}
                             <td>
-                                <a href="{% url 'fleet:fleet_details' fleet.fleet_id %}"  class="btn btn-xs btn-success">View fleet details</a>                           
+                                <a href="{% url 'fleet:fleet_details' fleet.fleet_id %}"  class="btn btn-xs btn-success">View fleet details</a>
                             </td>
                             {% endif %}
                             {% if perms.fleet.manage %}
                             <td>
-                                <a href="{% url 'fleet:edit_fleet' fleet.fleet_id %}"  class="btn btn-xs btn-success">Edit Fleet advert</a>                           
+                                <a href="{% url 'fleet:edit_fleet' fleet.fleet_id %}"  class="btn btn-xs btn-success">Edit Fleet advert</a>
                             </td>
                             {% endif %}
                         </tr>
-                        {% endfor %}                     
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
