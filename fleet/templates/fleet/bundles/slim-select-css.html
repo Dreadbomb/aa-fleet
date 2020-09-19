@@ -1,0 +1,7 @@
+{% load static %}
+
+{% if avoid_cdn %}
+    <link rel="stylesheet" href="{% static 'fleet/libs/slim-select/1.26.0/css/slimselect.min.css' %}">
+{% else %}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css">
+{% endif %}

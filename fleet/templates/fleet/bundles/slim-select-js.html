@@ -1,0 +1,7 @@
+{% load static %}
+
+{% if avoid_cdn %}
+    <script type="application/javascript" src="{% static 'fleet/libs/slim-select/1.26.0/js/slimselect.min.js' %}"></script>
+{% else %}
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
+{% endif %}

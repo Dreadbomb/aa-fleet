@@ -1,0 +1,7 @@
+{% load static %}
+
+{% if avoid_cdn %}
+    <link rel="stylesheet" href="{% static 'fleet/libs/multi-select/0.9.12/css/multi-select.min.css' %}">
+{% else %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/css/multi-select.min.css">
+{% endif %}

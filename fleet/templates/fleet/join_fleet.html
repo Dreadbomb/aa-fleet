@@ -1,13 +1,12 @@
 {% extends 'fleet/base.html' %}
 {% load i18n %}
 {% load humanize %}
-{% load static %}
 
 {% block page_title %}{% trans "Create fleet" %}{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'fleet/libs/multi-select/0.9.12/css/multi-select.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'fleet/libs/slim-select/1.26.0/css/slimselect.min.css' %}" />
+    {% include 'fleet/bundles/multi-select-css.html' %}
+    {% include 'fleet/bundles/slim-select-css.html' %}
 {% endblock %}
 
 {% block fleet_block %}
@@ -39,7 +38,7 @@
 {% endblock %}
 
 {% block extra_javascript %}
-    <script src="{% static 'fleet/libs/slim-select/1.26.0/js/slimselect.min.js' %}"></script>
+    {% include 'fleet/bundles/slim-select-js.html' %}
 {% endblock %}
 
 

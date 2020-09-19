@@ -2,16 +2,23 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template.defaulttags import register
+
+from fleet.app_settings import avoid_cdn
+
 from .tasks import (
     open_fleet,
     send_fleet_invitation,
     get_fleet_composition,
     get_fleet_aggregate,
 )
+
 from .models import Fleet
+
 from esi.decorators import token_required
+
 from allianceauth.eveonline.models import EveCharacter
 from allianceauth.groupmanagement.models import AuthGroup
+
 from bravado.exception import HTTPNotFound
 
 
@@ -20,10 +27,15 @@ from bravado.exception import HTTPNotFound
 def dashboard(request):
     groups = request.user.groups.all()
     fleets = Fleet.objects.filter(Q(groups__group__in=groups) | Q(groups=None)).all()
-    context = {"fleets": fleets}
+    context = {
+        "fleets": fleets,
+        "avoid_cdn": avoid_cdn(),  # AVOID_CDN setting
+    }
+
     if "error_edit_fleet" in request.session:
         context["error"] = request.session["error_edit_fleet"].get("error", "")
         del request.session["error_edit_fleet"]
+
     return render(request, "fleet/dashboard.html", context)
 
 
@@ -49,9 +61,14 @@ def create_fleet(request, token):
             )
             ctx["character_id"] = token.character_id
             ctx["auth_groups"] = auth_groups
+
             del request.session["modified_fleet_data"]
         else:
             ctx = {"character_id": token.character_id, "auth_groups": auth_groups}
+
+        # AVOID_CDN setting
+        ctx["avoid_cdn"] = avoid_cdn()
+
         return render(request, "fleet/create_fleet.html", context=ctx)
     return redirect("fleet:dashboard")
 
@@ -61,10 +78,12 @@ def create_fleet(request, token):
 def edit_fleet(request, fleet_id):
     fleet = Fleet.objects.get(fleet_id=fleet_id)
     auth_groups = AuthGroup.objects.filter(internal=False)
+
     ctx = {
         "character_id": fleet.fleet_commander_id,
         "auth_groups": auth_groups,
         "fleet": fleet,
+        "avoid_cdn": avoid_cdn(),  # AVOID_CDN setting
     }
 
     return render(request, "fleet/edit_fleet.html", context=ctx)
@@ -85,6 +104,7 @@ def join_fleet(request, fleet_id):
     if request.method == "POST":
         character_ids = request.POST.getlist("character_ids", [])
         send_fleet_invitation.delay(character_ids, fleet_id)
+
         return redirect("fleet:dashboard")
     else:
         characters = (
@@ -93,6 +113,10 @@ def join_fleet(request, fleet_id):
             .order_by("character_name")
         )
         ctx["characters"] = characters
+
+    # AVOID_CDN setting
+    ctx["avoid_cdn"] = avoid_cdn()
+
     return render(request, "fleet/join_fleet.html", context=ctx)
 
 
@@ -101,11 +125,14 @@ def join_fleet(request, fleet_id):
 def save_fleet(request):
     if request.method == "POST":
         free_move = request.POST.get("free_move", False)
+
         if free_move == "on":
             free_move = True
+
         motd = request.POST.get("motd", "")
         name = request.POST.get("name", "")
         groups = request.POST.getlist("groups", [])
+
         try:
             open_fleet(request.POST["character_id"], motd, free_move, name, groups)
         except HTTPNotFound as ex:
@@ -114,7 +141,9 @@ def save_fleet(request):
                 request.session["error_edit_fleet"] = {
                     "error": "Fleet advert is no longer valid"
                 }
+
                 return redirect("fleet:dashboard")
+
             if request.POST.get("origin", "") == "create":
                 request.session["modified_fleet_data"] = {
                     "error": ex.swagger_result["error"],
@@ -123,7 +152,9 @@ def save_fleet(request):
                     "free_move": free_move,
                     "groups": groups,
                 }
+
                 return redirect("fleet:create_fleet")
+
     return redirect("fleet:dashboard")
 
 
@@ -131,9 +162,12 @@ def save_fleet(request):
 @permission_required("fleet.manage")
 def fleet_details(request, fleet_id):
     fleet = get_fleet_composition(fleet_id)
+
     ctx = {
         "fleet": fleet,
+        "avoid_cdn": avoid_cdn(),  # AVOID_CDN setting
     }
+
     return render(request, "fleet/fleet_details.html", context=ctx)
 
 
